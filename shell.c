@@ -39,6 +39,16 @@ int main(){
 			free(command);
 			free(input);
 		}
+		if (strcmp(command[0],"cd")==0){
+			chdir(command[1]);
+			free(command);
+			free(input);
+			memcpy(display_text,"lhshell",8*sizeof(char));	
+			if(!(change_cwd_text(display_text)+1)){
+				printf("cwd error");
+			}		
+			continue;				
+		}
 		pid_t child_pid=fork();
 		if(child_pid==0){
 			printf("debug:child created %d",getpid());
