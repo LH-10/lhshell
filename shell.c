@@ -6,25 +6,31 @@
 #include <readline/readline.h>
 #define PATH_SIZE 100
 
+int change_cwd_text(char *display_text){
+
+	char current_dir[PATH_SIZE];
+	if(!getcwd(current_dir,PATH_SIZE)){
+		return -1;
+	}
+
+	if(!strcat(display_text,strcat(current_dir,"# "))){
+		printf("concat fail");
+		return -1;
+	}
+	return 1;
+}
+
 char **read_input(char*);
 
 int main(){
 	char **command=NULL;
 	char *input;
 	int status;
-	printf("here");
-	char *current_dir=malloc(PATH_SIZE*sizeof(char ) );
 
-	printf("here");
 	
-	getcwd(current_dir,PATH_SIZE);
-	
-	char display_text[40]="lhshell";
-	if(!strcat(display_text,strcat(current_dir," >"))){
-		printf("concat fail");
-		if(current_dir!=NULL)
-		free(current_dir);
-		return 1;
+	char display_text[90]="lhshell";
+	if(!(change_cwd_text(display_text)+1)){
+		printf("cwd error");
 	}
 	while(1){
 		input=readline(display_text);
@@ -45,7 +51,6 @@ int main(){
 		free(input);
 		free(command);
 	}
-	free(current_dir);
 }
 
 
