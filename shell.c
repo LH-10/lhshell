@@ -4,6 +4,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <readline/readline.h>
+#define PATH_SIZE 100
 
 char **read_input(char*);
 
@@ -11,8 +12,22 @@ int main(){
 	char **command=NULL;
 	char *input;
 	int status;
+	printf("here");
+	char *current_dir=malloc(PATH_SIZE*sizeof(char ) );
+
+	printf("here");
+	
+	getcwd(current_dir,PATH_SIZE);
+	
+	char display_text[40]="lhshell";
+	if(!strcat(display_text,strcat(current_dir," >"))){
+		printf("concat fail");
+		if(current_dir!=NULL)
+		free(current_dir);
+		return 1;
+	}
 	while(1){
-		input=readline("lhshell>");
+		input=readline(display_text);
 		command=read_input(input);
 		if (!command[0]){
 			free(command);
@@ -30,6 +45,7 @@ int main(){
 		free(input);
 		free(command);
 	}
+	free(current_dir);
 }
 
 
