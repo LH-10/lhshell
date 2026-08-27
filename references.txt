@@ -1,0 +1,2 @@
+1.https://github.com/indradhanush/rc-shell
+2.https://igupta.in/blog/writing-a-unix-shell-part-1/
