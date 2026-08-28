@@ -3,6 +3,7 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <signal.h>
 #include <readline/readline.h>
 #define PATH_SIZE 100
 
@@ -29,10 +30,13 @@ int main(){
 
 	
 	char display_text[90]="lhshell";
-	if(!(change_cwd_text(display_text)+1)){
+	if( change_cwd_text(display_text) < 0 ){
 		printf("cwd error");
 	}
+	signal(SIGINT,SIG_IGN);
+		
 	while(1){
+		
 		input=readline(display_text);
 		command=read_input(input);
 		if (!command[0]){
@@ -40,17 +44,20 @@ int main(){
 			free(input);
 		}
 		if (strcmp(command[0],"cd")==0){
-			chdir(command[1]);
+			if( chdir(command[1]) < 0 ) {
+				printf("error while changing directory");	
+			}
 			free(command);
 			free(input);
 			memcpy(display_text,"lhshell",8*sizeof(char));	
-			if(!(change_cwd_text(display_text)+1)){
+			if( change_cwd_text(display_text) < 0 ){
 				printf("cwd error");
 			}		
 			continue;				
 		}
 		pid_t child_pid=fork();
 		if(child_pid==0){
+			signal(SIGINT,SIG_DFL);
 			printf("debug:child created %d",getpid());
 			execvp(command[0],command);
 
