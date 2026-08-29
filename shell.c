@@ -14,7 +14,7 @@ int change_cwd_text(char *display_text){
 		return -1;
 	}
 
-	if(!strcat(display_text,strcat(current_dir,"# "))){
+	if(!strcat(display_text,strcat(current_dir,"\033[0m# "))){
 		printf("concat fail");
 		return -1;
 	}
@@ -29,7 +29,8 @@ int main(){
 	int status;
 
 	
-	char display_text[90]="lhshell";
+	char display_text[90]="\033[36mlhshell:\033[0m\033[33m";
+	size_t shell_name_size=sizeof("\033[36mlhshell:\033[0m\033[33m");
 	if( change_cwd_text(display_text) < 0 ){
 		printf("cwd error");
 	}
@@ -49,7 +50,7 @@ int main(){
 			}
 			free(command);
 			free(input);
-			memcpy(display_text,"lhshell",8*sizeof(char));	
+			memcpy(display_text,"\033[36mlhshell:\033[0m\033[33m",shell_name_size);	
 			if( change_cwd_text(display_text) < 0 ){
 				printf("cwd error");
 			}		
