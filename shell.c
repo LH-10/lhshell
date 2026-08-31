@@ -43,7 +43,14 @@ int main(){
 		if (!command[0]){
 			free(command);
 			free(input);
+			continue;
 		}
+		if (strcmp(command[0],"exit")==0) {
+			free(command);
+			free(input);
+			break;
+		}
+				
 		if (strcmp(command[0],"cd")==0){
 			if( chdir(command[1]) < 0 ) {
 				printf("error while changing directory");	
