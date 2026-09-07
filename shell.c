@@ -4,8 +4,15 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <signal.h>
+#include <setjmp.h>
 #include <readline/readline.h>
 #define PATH_SIZE 100
+
+static sigjmp_buf env;
+
+void signal_handler(int signo){
+	siglongjmp(env,35);
+}
 
 int change_cwd_text(char *display_text){
 
@@ -34,10 +41,14 @@ int main(){
 	if( change_cwd_text(display_text) < 0 ){
 		printf("cwd error");
 	}
-	signal(SIGINT,SIG_IGN);
+	signal(SIGINT,signal_handler);
 		
 	while(1){
-		
+	
+		if(sigsetjmp(env,1)==35){
+			printf("\n");
+		}	
+
 		input=readline(display_text);
 		command=read_input(input);
 		if (!command[0]){
