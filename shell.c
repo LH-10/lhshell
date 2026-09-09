@@ -1,10 +1,12 @@
 #include <stdio.h>
+#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/wait.h>
 #include <unistd.h>
 #include <signal.h>
 #include <setjmp.h>
+#include "colors.h"
 #include <readline/readline.h>
 #define PATH_SIZE 100
 
@@ -14,18 +16,18 @@ void signal_handler(int signo){
 	siglongjmp(env,35);
 }
 
-int change_cwd_text(char *display_text){
+int change_cwd_text(char *display_text,size_t display_text_size){
 
 	char current_dir[PATH_SIZE];
-	if(!getcwd(current_dir,PATH_SIZE)){
+	if(!getcwd(current_dir, PATH_SIZE)){
 		return -1;
 	}
 
-	if(!strcat(display_text,strcat(current_dir,"\033[0m# "))){
-		printf("concat fail");
-		return -1;
-	}
-	return 1;
+	int ret_val = append_colored_text(display_text, display_text_size, C_YELLOW, current_dir) ;
+	if (ret_val < 0) {return ret_val;}
+	return append_colored_text(display_text, display_text_size, C_RESET, "# ") ;
+	
+	
 }
 
 char **read_input(char*);
@@ -36,9 +38,14 @@ int main(){
 	int status;
 
 	
-	char display_text[90]="\033[36mlhshell:\033[0m\033[33m";
+	char display_text[190];
+	int sns=make_colored_text(display_text,sizeof(display_text),C_CYAN,"lhshell:") ;
+	if (sns < 0){
+		printf("error while making text");
+		return 0;
+	}
 	size_t shell_name_size=sizeof("\033[36mlhshell:\033[0m\033[33m");
-	if( change_cwd_text(display_text) < 0 ){
+	if( change_cwd_text(display_text,190) < 0 ){
 		printf("cwd error");
 	}
 	signal(SIGINT,signal_handler);
@@ -68,10 +75,12 @@ int main(){
 			}
 			free(command);
 			free(input);
-			memcpy(display_text,"\033[36mlhshell:\033[0m\033[33m",shell_name_size);	
-			if( change_cwd_text(display_text) < 0 ){
+			display_text[sns]='\0';
+
+			if( change_cwd_text(display_text,sizeof(display_text)) < 0 ){
 				printf("cwd error");
 			}		
+
 			continue;				
 		}
 		pid_t child_pid=fork();

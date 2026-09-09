@@ -11,5 +11,6 @@ extern const char C_MAGENTA[];
 extern const char C_RESET[];
 
 int  make_colored_text(char buf[],size_t bufsize,const char color[],const char text[]);
+int append_colored_text(char buf[],size_t bufsize,const char colors[],const char text[]);
 
 #endif
