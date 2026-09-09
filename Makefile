@@ -1,14 +1,18 @@
 CC = gcc
 LDLIBS = -lreadline
+SRC = colors.c shell.c
+OBJS= colors.o shell.o
+BUILD = build/lhshell
 
-build/lhshell: shell.o
-	$(CC)  shell.o $(LDLIBS) -o build/lhshell		
 
-dev: build/lhshell
-	./build/lhshell
+$(BUILD): $(OBJS)
+	$(CC)  $^ $(LDLIBS) -o $(BUILD)		
 
-shell.o: shell.c
-	$(CC) -c  shell.c -o shell.o 
+dev: $(BUILD)
+	$^
+
+$(SRC): 
+	$(CC) -c $@  
 shell.c:
 	echo "source does not exist"
 
