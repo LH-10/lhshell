@@ -13,6 +13,10 @@ dev: $(BUILD)
 
 $(SRC): 
 	$(CC) -c $@  
+
 shell.c:
 	echo "source does not exist"
+
+clean_ob: $(OBJS)
+	rm $^
 
