@@ -44,7 +44,6 @@ int main(){
 		printf("error while making text");
 		return 0;
 	}
-	size_t shell_name_size=sizeof("\033[36mlhshell:\033[0m\033[33m");
 	if( change_cwd_text(display_text,190) < 0 ){
 		printf("cwd error");
 	}
