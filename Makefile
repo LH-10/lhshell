@@ -11,11 +11,11 @@ $(BUILD): $(OBJS)
 dev: $(BUILD)
 	$^
 
-$(SRC): 
-	$(CC) -c $@  
+$(OBJS): %.o: %.c 
+	$(CC) -c $< -o $@  
 
-shell.c:
-	echo "source does not exist"
+$(SRC):
+	echo $@" does not exist"
 
 clean_ob: $(OBJS)
 	rm $^
