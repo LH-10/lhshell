@@ -56,6 +56,10 @@ int main(){
 		}	
 
 		input=readline(display_text);
+		if(input==NULL){
+			printf("\n");
+			exit(0);
+		} 
 		command=read_input(input);
 		if (!command[0]){
 			free(command);
